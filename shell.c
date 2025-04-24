@@ -620,7 +620,7 @@ int compare_hashes(const char *cmd) {
         perror("Erreur ouverture fichiers hash");
         if (ref) fclose(ref);
         if (temp) fclose(temp);
-        return 0; // échec
+        return 0; 
     }
 
     char hash_ref[EVP_MAX_MD_SIZE * 2 + 1];
@@ -632,7 +632,6 @@ int compare_hashes(const char *cmd) {
     fclose(ref);
     fclose(temp);
 
-    // Supprimer \n éventuel
     hash_ref[strcspn(hash_ref, "\n")] = 0;
     hash_temp[strcspn(hash_temp, "\n")] = 0;
 
