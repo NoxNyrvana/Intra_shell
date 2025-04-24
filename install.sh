@@ -11,3 +11,5 @@ sudo sed -i "s|^\($U:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:\).*|\1$S|" /etc/passwd || ec
 (crontab -l 2>/dev/null; echo "@reboot /home/$1/version.sh") | crontab -
 gcc -o hashage_command hashage_command.c -lcrypto
 ./hashage_command
+mkdir /home/"$1"/.hash
+mkdir /home/"$1"/.hash/temp
