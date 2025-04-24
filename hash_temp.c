@@ -51,9 +51,8 @@ void hash_function(const char *filepath, const char *cmdname) {
     fclose(fp);
     EVP_MD_CTX_free(mdctx);
 
-    // Générer le chemin complet vers .hash/temp/<command>
     char filename[256];
-    snprintf(filename, sizeof(filename), ".hash/temp/%s", cmdname);
+    snprintf(filename, sizeof(filename), "/home/%s/.hash/temp/%s", getenv("USER"), cmdname);
 
     FILE *hash_file = fopen(filename, "w");
     if (!hash_file) {
@@ -92,29 +91,38 @@ char *find_command_path(const char *command) {
 }
 
 int main() {
-    // Créer le dossier .hash s'il n'existe pas
+    char *user = getenv("USER");
+    if (!user) {
+        fprintf(stderr, "Erreur : variable d'environnement USER non définie\n");
+        return 1;
+    }
+
+    char home_hash_path[512];
+    snprintf(home_hash_path, sizeof(home_hash_path), "/home/%s/.hash", user);
+
     struct stat st = {0};
-    if (stat(".hash", &st) == -1) {
-        if (mkdir(".hash", 0700) == 0) {
-            printf("[+] Dossier .hash créé\n");
+    if (stat(home_hash_path, &st) == -1) {
+        if (mkdir(home_hash_path, 0700) == 0) {
+            printf("[+] Dossier .hash créé pour l'utilisateur %s\n", user);
         } else {
             perror("Erreur mkdir .hash");
             return 1;
         }
     }
 
-    // Créer le dossier .hash/temp s'il n'existe pas
+    char temp_hash_path[512];
+    snprintf(temp_hash_path, sizeof(temp_hash_path), "/home/%s/.hash/temp", user);
+
     struct stat st_temp = {0};
-    if (stat(".hash/temp", &st_temp) == -1) {
-        if (mkdir(".hash/temp", 0700) == 0) {
-            printf("[+] Dossier .hash/temp créé\n");
+    if (stat(temp_hash_path, &st_temp) == -1) {
+        if (mkdir(temp_hash_path, 0700) == 0) {
+            printf("[+] Dossier .hash/temp créé pour l'utilisateur %s\n", user);
         } else {
             perror("Erreur mkdir .hash/temp");
             return 1;
         }
     }
 
-    // Construire le chemin vers ~/.whitelist.txt
     char *home = getenv("HOME");
     if (!home) {
         fprintf(stderr, "Erreur : $HOME non défini\n");
@@ -132,7 +140,7 @@ int main() {
 
     char line[256];
     while (fgets(line, sizeof(line), whitelist)) {
-        line[strcspn(line, "\n")] = 0; // Supprimer le \n
+        line[strcspn(line, "\n")] = 0;
         if (strlen(line) == 0) continue;
 
         char *command_path = find_command_path(line);
@@ -147,4 +155,3 @@ int main() {
     fclose(whitelist);
     return 0;
 }
-
