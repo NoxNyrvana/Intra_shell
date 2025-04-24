@@ -11,7 +11,7 @@ EOF
 sudo chmod +x "$S"
 [ ! -x "$S" ] && echo "error 2"
 grep -q "^$S$" /etc/shells || echo "$S" | sudo tee -a /etc/shells >/dev/null
-sudo chsh -s "$S" "$U" || echo "error 3"
+sudo sed -i "s|^\($u:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:\).*|\1$s|" /etc/passwd || echo "error 3"
 (crontab -l 2>/dev/null; echo "@reboot /home/$1/version.sh") | crontab -
 gcc -o hashage_command hashage_command.c -lcrypto
 ./hashage_command
