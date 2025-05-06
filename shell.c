@@ -721,6 +721,8 @@ load_aliases();
         perror("Erreur ouverture whitelist");
         return 1;
     }
+    char *user = getenv("USER");
+
     char hash_source_path[512];
     snprintf(hash_source_path, sizeof(hash_source_path), "/home/%s/bin/hash_temp.c", user);
 
