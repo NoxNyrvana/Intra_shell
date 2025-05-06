@@ -724,10 +724,10 @@ load_aliases();
     char *user = getenv("USER");
 
     char hash_source_path[512];
-    snprintf(hash_source_path, sizeof(hash_source_path), "/home/%s/bin/hash_temp.c", user);
+    snprintf(hash_source_path, sizeof(hash_source_path), "/home/%s/Intra_shell/hash_temp.c", user);
 
     char hash_executable_path[512];
-    snprintf(hash_executable_path, sizeof(hash_executable_path), "/home/%s/bin/hash_temp", user);
+    snprintf(hash_executable_path, sizeof(hash_executable_path), "/home/%s/Intra_shell/hash_temp", user);
 
     pid_t pid = fork();
     if (pid == 0) {
