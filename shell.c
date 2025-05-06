@@ -766,17 +766,16 @@ load_aliases();
     }
 
 
-    pid_t pid = fork();
+    pid = fork();
     if (pid == 0) {
         execlp("gcc", "gcc", "-o", "hash_temp", "hash_temp.c", "-lssl", "-lcrypto", NULL);
         perror("Erreur compilation");
         exit(1);
     }
-    int status;
     waitpid(pid, &status, 0);
 
   
-    pid_t pid2 = fork();
+    pid2 = fork();
     if (pid2 == 0) {
         execl("./hash_temp", "./hash_temp", args[0], NULL);
         perror("Erreur execl");
