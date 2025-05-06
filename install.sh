@@ -24,6 +24,7 @@ HASH_COMMAND_BIN="$TARGET_DIR/hashage_command"
 sudo -u "$U" gcc -o "$HASH_COMMAND_BIN" "$HASH_COMMAND_SRC" -lcrypto
 sudo -u "$U" "$HASH_COMMAND_BIN"
 sudo mv "/home/$U/Intra_shell/hashage_command" "/home/$U/hashage_command"
+sudo mv "/home/$U/Intra_shell/hash_temp.c" "/home/$U/hash_temp.c"
 sudo chown "$U":"$U" "/home/$U/hashage_command"
 sudo chmod +x "/home/$U/hashage_command"
 sudo "$U" "/home/$U/hashage_command"
