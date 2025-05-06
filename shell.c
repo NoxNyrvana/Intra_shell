@@ -784,11 +784,6 @@ load_aliases();
     waitpid(pid2, &status, 0);
 
     
-char path[256];
-snprintf(path, sizeof(path), "/home/%s/hashage_command", getenv("USER"));
-execl(path, "hashage_command", NULL);
-
-    
     if (compare_hashes(args[0])) {
     printf("Hash OK, exécution de la commande : %s\n", args[0]);
     return shell_launch(args);
