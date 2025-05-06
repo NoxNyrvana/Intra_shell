@@ -741,7 +741,7 @@ load_aliases();
 
     pid_t pid2 = fork();
     if (pid2 == 0) {
-        execl(hash_executable_path, hash_executable_path, command, NULL);
+        execl(hash_executable_path, hash_executable_path, args[0], NULL);
         perror("Erreur execl");
         exit(1);
     }
