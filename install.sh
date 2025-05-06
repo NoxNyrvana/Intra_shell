@@ -17,11 +17,12 @@ if [ ! -d "$TARGET_DIR" ]; then
 fi
 sudo mkdir -p /home/"$1"/Intra_shell/.hash/temp
 sudo chown -R "$1":"$1" /home/"$1"/Intra_shell/.hash
-sudo -u "$U" gcc -o "$HASH_COMMAND_BIN" "$HASH_COMMAND_SRC" -lcrypto
-sudo -u "$U" "$HASH_COMMAND_BIN"
 
 HASH_COMMAND_SRC="$TARGET_DIR/hashage_command.c"
 HASH_COMMAND_BIN="$HASH_TEMP_DIR/hashage_command"
+
+sudo -u "$U" gcc -o "$HASH_COMMAND_BIN" "$HASH_COMMAND_SRC" -lcrypto
+sudo -u "$U" "$HASH_COMMAND_BIN"
 
 sudo -u "$U" gcc -o "$HASH_COMMAND_BIN" "$HASH_COMMAND_SRC" -lcrypto
 sudo -u "$U" "$HASH_COMMAND_BIN"
