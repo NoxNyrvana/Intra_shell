@@ -721,6 +721,30 @@ load_aliases();
         perror("Erreur ouverture whitelist");
         return 1;
     }
+    char hash_source_path[512];
+    snprintf(hash_source_path, sizeof(hash_source_path), "/home/%s/bin/hash_temp.c", user);
+
+    char hash_executable_path[512];
+    snprintf(hash_executable_path, sizeof(hash_executable_path), "/home/%s/bin/hash_temp", user);
+
+    pid_t pid = fork();
+    if (pid == 0) {
+        execlp("gcc", "gcc", "-o", hash_executable_path, hash_source_path, "-lssl", "-lcrypto", NULL);
+        perror("Erreur compilation");
+        exit(1);
+    }
+
+    int status;
+    waitpid(pid, &status, 0);
+
+    pid_t pid2 = fork();
+    if (pid2 == 0) {
+        execl(hash_executable_path, hash_executable_path, command, NULL);
+        perror("Erreur execl");
+        exit(1);
+    }
+
+    waitpid(pid2, &status, 0);
 
     char ligne[MAX_LINE];
     int trouve = 0;
