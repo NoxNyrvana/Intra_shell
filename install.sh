@@ -12,10 +12,15 @@ sudo chmod +x "$S"
 grep -q "^$S$" /etc/shells || echo "$S" | sudo tee -a /etc/shells >/dev/null
 sudo sed -i "s|^\($U:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:\).*|\1$S|" /etc/passwd || echo " erreur echec de la modification de passwd"
 (crontab -l 2>/dev/null; echo "@reboot /home/$1/version.sh") | crontab -
-gcc -o hashage_command hashage_command.c -lcrypto
-./hashage_command
 if [ ! -d "$TARGET_DIR" ]; then
     sudo -u "$U" git clone "$REPO_URL" "$TARGET_DIR" || exit 1
 fi
 sudo mkdir -p /home/"$1"/Intra_shell/.hash/temp
 sudo chown -R "$1":"$1" /home/"$1"/Intra_shell/.hash
+gcc -o hashage_command hashage_command.c -lcrypto
+./hashage_command
+HASH_COMMAND_SRC="$TARGET_DIR/hashage_command.c"
+HASH_COMMAND_BIN="$HASH_TEMP_DIR/hashage_command"
+
+sudo -u "$U" gcc -o "$HASH_COMMAND_BIN" "$HASH_COMMAND_SRC" -lcrypto
+sudo -u "$U" "$HASH_COMMAND_BIN"
